@@ -18,9 +18,9 @@ import {
   saveProjects,
 } from "~/lib/storage";
 
-import type { GitHubStatus, Project, Status } from "~/lib/types";
+import type { GitHubStatus, Project, Status } from "~/types/project";
 
-import { emptyProject, GITHUB_STATUSES, STATUSES } from "~/lib/types";
+import { emptyProject, GITHUB_STATUSES, STATUSES } from "~/types/project";
 import type { Route } from "./+types/home";
 
 export function meta(_: Route.MetaArgs) {
