@@ -20,6 +20,7 @@
     "@react-router/node": "^8.5.1",
     "@react-router/serve": "^8.5.1",
     "drizzle-orm": "^0.45.4",
+    "fractional-indexing": "^4.0.0",
     "isbot": "^5.2.2",
     "lucide-react": "^1.65.0",
     "react": "^19.3.1",
