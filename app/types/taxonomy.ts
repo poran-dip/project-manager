@@ -1,4 +1,4 @@
-/** 
+/**
  * Project lifecycle stages, in lifecycle order. Source of truth for the
  * Drizzle enum and UI ordering.
  */
@@ -54,7 +54,7 @@ export const CATEGORY_GROUP_INFO = {
   kind: { label: "Kind" },
 } satisfies Record<CategoryGroup, { label: string }>;
 
-/** 
+/**
  * Project categories; a project can have several. Source of truth for the
  * Drizzle enum and UI ordering.
  */

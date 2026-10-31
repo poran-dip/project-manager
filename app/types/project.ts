@@ -1,72 +1,18 @@
-export type Status =
-  | "scrapped"
-  | "archived"
-  | "ideas"
-  | "experiments"
-  | "has-potential"
-  | "working-on"
-  | "complete"
-  | "templates"
-  | "games";
+import type { projects } from "~/.server/db/schema";
+import type { Category } from "./taxonomy";
 
-export type GitHubStatus =
-  | "public"
-  | "public-archived"
-  | "private"
-  | "not-on-gh";
+/** A row of the `projects` table, without categories or tech. */
+export type ProjectRow = typeof projects.$inferSelect;
 
-export interface Project {
-  id: string;
-  name?: string;
-  startDate?: Date;
-  lastUpdated?: Date;
+/** Fields accepted when inserting a project row. */
+export type NewProjectRow = typeof projects.$inferInsert;
 
-  urls: {
-    github?: string;
-    live?: string;
-  };
+/** A project with its categories and tech stack. */
+export type Project = ProjectRow & {
+  categories: Category[];
+  /** Tech display names, e.g. `["React", "SQLite"]`. */
+  tech: string[];
+};
 
-  ambition?: number;
-  order: number;
-
-  status?: Status;
-  githubStatus?: GitHubStatus;
-
-  techStack: string[];
-  bullets: string[];
-  notes: string[];
-}
-
-export const STATUSES: Status[] = [
-  "scrapped",
-  "archived",
-  "ideas",
-  "experiments",
-  "has-potential",
-  "working-on",
-  "complete",
-  "templates",
-  "games",
-];
-
-export const GITHUB_STATUSES: GitHubStatus[] = [
-  "public",
-  "public-archived",
-  "private",
-  "not-on-gh",
-];
-
-export const emptyProject = (order = 1): Project => ({
-  id: crypto.randomUUID(),
-  order,
-
-  ambition: 5,
-  status: "ideas",
-  githubStatus: "not-on-gh",
-
-  urls: {},
-
-  techStack: [],
-  bullets: [],
-  notes: [],
-});
+/** What the public view may see. Private fields are left out. */
+export type PublicProject = Omit<Project, "notes" | "ambition">;
