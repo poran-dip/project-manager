@@ -10,7 +10,6 @@
 }
 
 :root {
-  /* biome-ignore lint/suspicious/noDuplicateFontNames: changes browser behaviour */
   font-family: monospace, monospace;
 }
 

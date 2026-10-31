@@ -264,9 +264,7 @@ function ProjectCard({
       className="group min-h-44 rounded-xl border border-border bg-surface p-4 text-left transition hover:-translate-y-1 hover:bg-surface-raised hover:border-border-hover"
     >
       <div className="mb-5 flex items-start justify-between gap-3">
-        <span className="text-xs text-fg/70">
-          #{project.order}
-        </span>
+        <span className="text-xs text-fg/70">#{project.order}</span>
 
         <span className="rounded-md bg-amber-800 border border-border/70 px-2 py-1 text-[11px] capitalize text-fg/70">
           {statusLabel(project.status ?? "ideas")}
