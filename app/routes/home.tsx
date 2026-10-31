@@ -136,7 +136,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100">
+    <main className="min-h-screen bg-deep text-fg">
       <div className="mx-auto max-w-7xl px-6 py-8">
         <header className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -261,20 +261,20 @@ function ProjectCard({
     <button
       type="button"
       onClick={onClick}
-      className="group min-h-44 rounded-xl border border-zinc-800 bg-zinc-900/40 p-5 text-left transition hover:-translate-y-0.5 hover:border-zinc-700 hover:bg-zinc-900"
+      className="group min-h-44 rounded-xl border border-border bg-surface p-4 text-left transition hover:-translate-y-1 hover:bg-surface-raised hover:border-border-hover"
     >
       <div className="mb-5 flex items-start justify-between gap-3">
-        <span className="text-xs tabular-nums text-zinc-600">
+        <span className="text-xs text-fg/70">
           #{project.order}
         </span>
 
-        <span className="rounded-md bg-zinc-800 px-2 py-1 text-[11px] capitalize text-zinc-400">
-          {statusLabel(project.status)}
+        <span className="rounded-md bg-amber-800 border border-border/70 px-2 py-1 text-[11px] capitalize text-fg/70">
+          {statusLabel(project.status ?? "ideas")}
         </span>
       </div>
 
-      <h2 className="line-clamp-2 text-base font-medium text-zinc-100">
-        {project.name || "untitled project"}
+      <h2 className="line-clamp-2 text-base font-medium text-fg">
+        {project.name || `project #${project.order}`}
       </h2>
 
       <div className="mt-3 flex flex-wrap gap-1.5">
