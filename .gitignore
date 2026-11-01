@@ -7,3 +7,6 @@ build/
 
 # Tests
 .test-db/
+
+# Dev
+local.db*
