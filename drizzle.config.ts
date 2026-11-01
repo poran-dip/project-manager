@@ -7,11 +7,12 @@ if (!url) {
 }
 
 export default defineConfig({
-  schema: "./app/.server/db/schema.ts",
+  schema: "./app/.server/db/schema/index.ts",
   out: "./drizzle",
   dialect: "turso",
   dbCredentials: {
     url,
-    authToken: process.env.DATABASE_AUTH_TOKEN,
+    // Empty means unset: drizzle-kit rejects an empty token for file URLs.
+    authToken: process.env.DATABASE_AUTH_TOKEN || undefined,
   },
 });

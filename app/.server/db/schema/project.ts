@@ -9,8 +9,8 @@ import {
   sqliteTable,
   text,
 } from "drizzle-orm/sqlite-core";
-import { GITHUB_STATUSES } from "../../types/github-status";
-import { CATEGORIES, STAGES } from "../../types/taxonomy";
+import { GITHUB_STATUSES } from "../../../types/github-status";
+import { CATEGORIES, STAGES } from "../../../types/taxonomy";
 
 /** One row per tracked project. */
 export const projects = sqliteTable(

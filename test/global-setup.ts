@@ -21,6 +21,14 @@ export default async function setup() {
   process.env.DATABASE_URL = url;
   process.env.DATABASE_AUTH_TOKEN = "";
 
+  // Placeholder auth config so the Better Auth instance can load.
+  process.env.BETTER_AUTH_URL = "http://localhost:5173";
+  process.env.BETTER_AUTH_SECRET =
+    "test-secret-not-used-outside-tests-0123456789";
+  process.env.GITHUB_CLIENT_ID = "test-client-id";
+  process.env.GITHUB_CLIENT_SECRET = "test-client-secret";
+  process.env.ADMIN_GITHUB_IDS = "";
+
   const client = createClient({ url });
   const { apply } = await pushSQLiteSchema(schema, drizzle(client));
   await apply();
