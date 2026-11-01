@@ -8,6 +8,8 @@ import {
   getProjects,
   getPublicProject,
   getPublicProjects,
+  getTechNames,
+  moveProject,
   orderBetween,
   updateProject,
 } from ".";
@@ -237,5 +239,70 @@ describe("ordering", () => {
     const names = (await getProjects()).map((p) => p.name);
 
     expect(names).toEqual(["B", "A"]);
+  });
+});
+
+describe("moveProject", () => {
+  async function names() {
+    return (await getProjects()).map((p) => p.name);
+  }
+
+  it("moves a project between two neighbours", async () => {
+    const a = await createProject({ name: "A" });
+    const b = await createProject({ name: "B" });
+    const c = await createProject({ name: "C" });
+
+    expect(await moveProject(c, { prevId: a, nextId: b })).toBe(true);
+    expect(await names()).toEqual(["A", "C", "B"]);
+  });
+
+  it("moves a project to either end", async () => {
+    const a = await createProject({ name: "A" });
+    await createProject({ name: "B" });
+    const c = await createProject({ name: "C" });
+
+    await moveProject(c, { prevId: null, nextId: a });
+    expect(await names()).toEqual(["C", "A", "B"]);
+
+    await moveProject(c, { prevId: (await getProjects())[2].id, nextId: null });
+    expect(await names()).toEqual(["A", "B", "C"]);
+  });
+
+  it("leaves updatedAt alone", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2026-01-01T00:00:00Z"));
+    const a = await createProject({ name: "A" });
+    const b = await createProject({ name: "B" });
+
+    vi.setSystemTime(new Date("2026-02-01T00:00:00Z"));
+    await moveProject(b, { prevId: null, nextId: a });
+
+    expect((await getProject(b))?.updatedAt).toEqual(
+      new Date("2026-01-01T00:00:00Z"),
+    );
+  });
+
+  it("refuses missing projects, self-neighbours and out-of-order neighbours", async () => {
+    const a = await createProject({ name: "A" });
+    const b = await createProject({ name: "B" });
+    const c = await createProject({ name: "C" });
+
+    expect(await moveProject("missing", { prevId: a, nextId: b })).toBe(false);
+    expect(await moveProject(c, { prevId: "missing", nextId: null })).toBe(
+      false,
+    );
+    expect(await moveProject(c, { prevId: c, nextId: null })).toBe(false);
+    expect(await moveProject(c, { prevId: a, nextId: a })).toBe(false);
+    expect(await moveProject(c, { prevId: b, nextId: a })).toBe(false);
+    expect(await names()).toEqual(["A", "B", "C"]);
+  });
+});
+
+describe("getTechNames", () => {
+  it("lists every tech name, sorted, including unused ones", async () => {
+    const id = await createProject({ name: "A", tech: ["vite", "React"] });
+    await updateProject(id, { tech: ["React"] });
+
+    expect(await getTechNames()).toEqual(["React", "vite"]);
   });
 });

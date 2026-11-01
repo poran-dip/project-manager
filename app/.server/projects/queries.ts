@@ -3,7 +3,7 @@
 import { asc, eq } from "drizzle-orm";
 import type { Project } from "~/types/project";
 import { db } from "../db/client";
-import { projects } from "../db/schema";
+import { projects, tech } from "../db/schema";
 import { withRelations } from "./relations";
 
 /** All projects, in display order. */
@@ -22,4 +22,14 @@ export async function getProject(id: string): Promise<Project | undefined> {
     .limit(1);
 
   return (await withRelations(rows))[0];
+}
+
+/** Every tech name, sorted, for autocomplete. Includes unused ones. */
+export async function getTechNames(): Promise<string[]> {
+  const rows = await db
+    .select({ name: tech.name })
+    .from(tech)
+    .orderBy(asc(tech.key));
+
+  return rows.map((r) => r.name);
 }

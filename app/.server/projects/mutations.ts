@@ -1,7 +1,7 @@
 // Admin writes. Call only behind the auth check. Inputs are trusted here:
 // validate form data in the action first.
 
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
 import { db } from "../db/client";
 import { projectCategories, projects, projectTech } from "../db/schema";
 import { orderBetween } from "./order";
@@ -85,5 +85,48 @@ export async function deleteProject(id: string): Promise<boolean> {
       .returning({ id: projects.id });
 
     return deleted.length > 0;
+  });
+}
+
+/**
+ * Moves a project between two neighbours, given by id; `null` means the
+ * start or end of the list. Returns `false` if any project is missing or the
+ * neighbours aren't in order, e.g. a stale list in another tab.
+ */
+export async function moveProject(
+  id: string,
+  { prevId, nextId }: { prevId: string | null; nextId: string | null },
+): Promise<boolean> {
+  if (id === prevId || id === nextId) return false;
+  if (prevId !== null && prevId === nextId) return false;
+
+  return db.transaction(async (tx) => {
+    const ids = [id, prevId, nextId].filter((v): v is string => v !== null);
+    const rows = await tx
+      .select({
+        id: projects.id,
+        order: projects.order,
+        updatedAt: projects.updatedAt,
+      })
+      .from(projects)
+      .where(inArray(projects.id, ids));
+    const orderOf = new Map(rows.map((r) => [r.id, r.order]));
+    const moved = rows.find((r) => r.id === id);
+
+    if (!moved || !ids.every((v) => orderOf.has(v))) return false;
+
+    const prev = prevId === null ? null : (orderOf.get(prevId) ?? null);
+    const next = nextId === null ? null : (orderOf.get(nextId) ?? null);
+
+    if (prev !== null && next !== null && prev >= next) return false;
+
+    // Reordering isn't an edit, so updatedAt is set back to its own value
+    // rather than left to $onUpdateFn.
+    await tx
+      .update(projects)
+      .set({ order: orderBetween(prev, next), updatedAt: moved.updatedAt })
+      .where(eq(projects.id, id));
+
+    return true;
   });
 }

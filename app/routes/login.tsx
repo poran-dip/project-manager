@@ -1,6 +1,7 @@
 import { Form, redirect } from "react-router";
 import { getAdminStatus, NO_STORE, safeAdminPath } from "~/.server/auth/admin";
 import { auth } from "~/.server/auth/auth";
+import { buttonClass, Notice } from "~/components/ui";
 import type { Route } from "./+types/login";
 
 export function meta() {
@@ -59,26 +60,21 @@ export default function Login({ loaderData }: Route.ComponentProps) {
     <main className="mx-auto flex min-h-svh max-w-sm flex-col justify-center gap-4 p-6">
       <h1 className="text-xl font-semibold">Sign in</h1>
 
-      {error && (
-        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
-          {error}
-        </p>
-      )}
+      {error && <Notice tone="danger">{error}</Notice>}
 
       {signedInAs ? (
         <Form method="post" action="/logout">
-          <p className="mb-3 text-sm">Signed in as {signedInAs}.</p>
-          <button type="submit" className="rounded border px-3 py-2 text-sm">
+          <p className="mb-3 text-sm text-fg-muted">
+            Signed in as {signedInAs}.
+          </p>
+          <button type="submit" className={buttonClass("secondary")}>
             Sign out
           </button>
         </Form>
       ) : (
         <Form method="post">
           <input type="hidden" name="redirectTo" value={redirectTo} />
-          <button
-            type="submit"
-            className="w-full rounded bg-neutral-900 px-3 py-2 text-sm text-white dark:bg-white dark:text-neutral-900"
-          >
+          <button type="submit" className={buttonClass("primary", "w-full")}>
             Continue with GitHub
           </button>
         </Form>
