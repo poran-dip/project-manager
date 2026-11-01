@@ -1,11 +1,11 @@
 // Public project page. The write-up is rendered to HTML on the server with
-// raw HTML disabled; see ~/.server/markdown.
+// raw HTML disabled; see ~/lib/markdown.
 
 import { ExternalLink } from "lucide-react";
 import { data, Link } from "react-router";
-import { renderMarkdown } from "~/.server/markdown";
 import { getPublicProject } from "~/.server/projects";
 import { Badge } from "~/components/ui";
+import { renderMarkdown } from "~/lib/markdown";
 import { PUBLIC_CACHE, publicRepoUrl, SITE_NAME } from "~/lib/public";
 import { GITHUB_STATUS_INFO } from "~/types/github-status";
 import { CATEGORY_INFO, STAGE_INFO } from "~/types/taxonomy";

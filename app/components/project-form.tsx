@@ -1,8 +1,8 @@
 // The project editor. Field names match `readProjectForm`. Explicit save only.
-// Plain inputs for now: the category multi-select, tech chip input and
-// markdown editors replace these later without changing the field names.
+// Plain inputs for now: the category multi-select and tech chip input replace
+// these later without changing the field names.
 
-import { useId, useState } from "react";
+import { type ReactNode, useId, useState } from "react";
 import { Form } from "react-router";
 import type { ProjectFormErrors, ProjectFormValues } from "~/lib/project-form";
 import { GITHUB_STATUS_INFO, GITHUB_STATUSES } from "~/types/github-status";
@@ -14,6 +14,7 @@ import {
   STAGE_INFO,
   STAGES,
 } from "~/types/taxonomy";
+import { MarkdownField } from "./markdown-field";
 import { Button, cx, describedBy, Field, FieldError, inputClass } from "./ui";
 
 export function ProjectForm({
@@ -22,12 +23,15 @@ export function ProjectForm({
   techSuggestions,
   submitLabel,
   busy,
+  footer,
 }: {
   defaults: ProjectFormValues;
   errors?: ProjectFormErrors;
   techSuggestions: string[];
   submitLabel: string;
   busy: boolean;
+  /** Extra controls beside the submit button, submitted with the form. */
+  footer?: ReactNode;
 }) {
   const techListId = useId();
   const [isPublic, setIsPublic] = useState(defaults.isPublic);
@@ -248,35 +252,23 @@ export function ProjectForm({
         </Field>
       </section>
 
-      <Field
+      <MarkdownField
+        id="writeup"
+        name="writeup"
         label="Write-up (public, markdown)"
-        htmlFor="writeup"
+        rows={14}
+        defaultValue={defaults.writeup}
         error={errors.writeup}
-      >
-        <textarea
-          id="writeup"
-          name="writeup"
-          rows={14}
-          defaultValue={defaults.writeup}
-          className={inputClass}
-          {...describedBy("writeup", errors.writeup)}
-        />
-      </Field>
+      />
 
-      <Field
+      <MarkdownField
+        id="notes"
+        name="notes"
         label="Notes (private, markdown)"
-        htmlFor="notes"
+        rows={8}
+        defaultValue={defaults.notes}
         error={errors.notes}
-      >
-        <textarea
-          id="notes"
-          name="notes"
-          rows={8}
-          defaultValue={defaults.notes}
-          className={inputClass}
-          {...describedBy("notes", errors.notes)}
-        />
-      </Field>
+      />
 
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-2 text-sm text-fg-muted">Visibility</legend>
@@ -311,7 +303,8 @@ export function ProjectForm({
         <FieldError id="isFeatured-error" error={errors.isFeatured} />
       </fieldset>
 
-      <div className="flex justify-end">
+      <div className="flex flex-wrap items-center justify-end gap-4">
+        {footer}
         <Button type="submit" variant="primary" disabled={busy}>
           {busy ? "Saving…" : submitLabel}
         </Button>

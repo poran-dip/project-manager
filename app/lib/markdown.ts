@@ -1,6 +1,7 @@
-// Markdown to HTML for public write-ups. Raw HTML in the source is escaped,
-// not rendered, and markdown-it's default link check drops `javascript:`
-// and similar URLs.
+// Markdown to HTML, shared by the public page (server) and the editor preview
+// (client), so the preview matches. Raw HTML in the source is escaped, not
+// rendered, and markdown-it's default link check drops `javascript:` and
+// similar URLs, so the output is safe to inject.
 
 import MarkdownIt, { type RendererRule } from "markdown-it";
 
