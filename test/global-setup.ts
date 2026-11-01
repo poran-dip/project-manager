@@ -19,7 +19,7 @@ export default async function setup() {
   const url = pathToFileURL(join(dir, "test.db")).href;
 
   process.env.DATABASE_URL = url;
-  process.env.AUTH_TOKEN = "";
+  process.env.DATABASE_AUTH_TOKEN = "";
 
   const client = createClient({ url });
   const { apply } = await pushSQLiteSchema(schema, drizzle(client));

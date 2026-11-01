@@ -13,7 +13,7 @@ if (!url) {
 const client = createClient({
   url,
   // Not needed for local file databases.
-  authToken: process.env.AUTH_TOKEN,
+  authToken: process.env.DATABASE_AUTH_TOKEN,
 });
 
 /** Drizzle client. Import only from server code. */
