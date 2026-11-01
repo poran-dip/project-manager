@@ -1,5 +1,13 @@
 node_modules/
+.env*
+!.env.example
 
 # React Router
 .react-router/
 build/
+
+# Tests
+.test-db/
+
+# Dev
+local.db*
