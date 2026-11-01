@@ -2,8 +2,11 @@
 
 import type { GitHubStatus } from "~/types/github-status";
 
-/** Site name for titles and link previews. */
-export const SITE_NAME = "Projects";
+/** Whose projects these are. Suffix for per-project page titles. */
+export const OWNER_NAME = "Poran Dip";
+
+/** Site name for the home page title and link previews. */
+export const SITE_NAME = `Projects · ${OWNER_NAME}`;
 
 /**
  * Cache-Control for public pages: CDN caches for a minute, then serves stale

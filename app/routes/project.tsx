@@ -6,16 +6,21 @@ import { data, Link } from "react-router";
 import { getPublicProject } from "~/.server/projects";
 import { Badge } from "~/components/ui";
 import { renderMarkdown } from "~/lib/markdown";
-import { PUBLIC_CACHE, publicRepoUrl, SITE_NAME } from "~/lib/public";
+import {
+  OWNER_NAME,
+  PUBLIC_CACHE,
+  publicRepoUrl,
+  SITE_NAME,
+} from "~/lib/public";
 import { GITHUB_STATUS_INFO } from "~/types/github-status";
 import { CATEGORY_INFO, STAGE_INFO } from "~/types/taxonomy";
 import type { Route } from "./+types/project";
 
 export function meta({ loaderData }: Route.MetaArgs) {
-  if (!loaderData) return [{ title: `Not found · ${SITE_NAME}` }];
+  if (!loaderData) return [{ title: `Not found · ${OWNER_NAME}` }];
 
   const { name, tagline, url } = loaderData;
-  const title = `${name} · ${SITE_NAME}`;
+  const title = `${name} · ${OWNER_NAME}`;
 
   return [
     { title },
